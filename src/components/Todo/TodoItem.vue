@@ -1,14 +1,15 @@
 <template>
     <div>
-        <label :class="{done: todo.completed}">
+        <form @submit.prevent="$emit('remove', todo.id)"
+              :class="{done: todo.completed}">
             <input type="checkbox"
                    @change="todo.completed = !todo.completed">
             <span>{{index + 1}}</span>
             <strong>{{todo.title}}</strong>
-        </label>
-        <button @click="$emit('remove', todo.id)">
-            &times
-        </button>
+            <button>
+                &times
+            </button>
+        </form>
     </div>
 </template>
 
@@ -18,7 +19,7 @@ export default {
     props: {
         todo: Object,
         index: Number
-    },
+    }
 }
 </script>
 

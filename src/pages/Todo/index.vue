@@ -1,39 +1,37 @@
 <template>
     <div>
+        <loading v-if="loading"/>
         <todo-list :todos="todos"
                    @remove="removeItem"
                    @push="pushItem"
+                   v-else-if="todos.length"
         />
+        <div v-else>Записей нет</div>
     </div>
 </template>
 
 <script>
+import Loading from "@/components/Loading";
 import TodoList from "@/components/Todo/TodoList";
+import TodoInput from "@/components/Todo/TodoInput";
 export default {
     name: "index",
     data () {
         return {
-            todos: [
-                {
-                    id: 1,
-                    title: 'title1',
-                    description: 'description1',
-                    completed: false
-                },
-                {
-                    id: 2,
-                    title: 'title2',
-                    description: 'description12',
-                    completed: false
-                },
-                {
-                    id: 3,
-                    title: 'title3',
-                    description: 'description3',
-                    completed: false
-                },
-            ]
+            todos: [],
+            loading: true
         }
+    },
+    mounted() {
+        fetch('https://jsonplaceholder.typicode.com/todos?_limit=5')
+            .then(response => response.json())
+            .then(json => {
+                setTimeout(() => {
+                    this.todos = json
+                    this.loading = false
+                }, 1000)
+            }
+            )
     },
     methods: {
         removeItem(id) {
@@ -43,7 +41,7 @@ export default {
             this.todos.push(todo)
         }
     },
-    components: {TodoList},
+    components: {TodoList, Loading, TodoInput}
 }
 </script>
 
